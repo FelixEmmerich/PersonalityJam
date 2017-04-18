@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlyingObjectSpawner : MonoBehaviour
 {
 
-    public GameObject Disc;
+    public GameObject DiscRef;
     public List<GameObject> FlyingObjectPrefabs;
     public float SpawnTime;
     public float SpawnRadius;
@@ -13,7 +13,11 @@ public class FlyingObjectSpawner : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        
+        if (DiscRef == null)
+        {
+            DiscRef = Disc.Instance.gameObject;
+        }
+        StartCoroutine(SpawnAfterTime(SpawnTime));
 	}
 	
 	// Update is called once per frame
@@ -31,7 +35,7 @@ public class FlyingObjectSpawner : MonoBehaviour
     public void Spawn()
     {
         GameObject objectToSpawn = FlyingObjectPrefabs[Random.Range(0,FlyingObjectPrefabs.Count-1)];
-        Spawn(objectToSpawn, Disc.transform.position, SpawnRadius);
+        Spawn(objectToSpawn, DiscRef.transform.position, SpawnRadius);
     }
 
     public Vector2 GetRandomPointOnCircle(Vector2 center, float radius)
