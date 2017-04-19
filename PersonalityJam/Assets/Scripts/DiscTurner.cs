@@ -23,6 +23,11 @@ public class DiscTurner : MonoBehaviour
         {
             DiscRef = Disc.Instance.GetComponent<Rigidbody2D>();
         }
+        if (DiscElements.Length == 0)
+        {
+            DiscElements = new DiscElement[1];
+            DiscElements[1] = new DiscElement { RigidBody2D = DiscRef };
+        }
 	}
 	
 	// Update is called once per frame

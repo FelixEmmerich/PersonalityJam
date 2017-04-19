@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+public class Utilities : MonoBehaviour
 {
     public void LoadScene(string name)
     {
@@ -12,5 +12,10 @@ public class SceneLoader : MonoBehaviour
         }
 
         SceneManager.LoadScene(name);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }
