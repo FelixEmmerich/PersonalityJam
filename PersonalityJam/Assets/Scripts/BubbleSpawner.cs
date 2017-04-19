@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlyingObjectSpawner : MonoBehaviour
+public class BubbleSpawner : MonoBehaviour
 {
 
     public GameObject DiscRef;
-    public List<GameObject> FlyingObjectPrefabs;
+    public List<GameObject> BubblePrefabs;
     public float SpawnTime;
     public float SpawnRadius;
 
@@ -34,7 +34,7 @@ public class FlyingObjectSpawner : MonoBehaviour
 
     public void Spawn()
     {
-        GameObject objectToSpawn = FlyingObjectPrefabs[Random.Range(0,FlyingObjectPrefabs.Count-1)];
+        GameObject objectToSpawn = BubblePrefabs[Random.Range(0,BubblePrefabs.Count-1)];
         Spawn(objectToSpawn, DiscRef.transform.position, SpawnRadius);
     }
 

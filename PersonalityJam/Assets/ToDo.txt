@@ -1,0 +1,24 @@
+MUST-HAVES
+===================
+
+GameManager(Singleton) 
+[verwaltet bubbles]
+
+gameState(running, gameOverState)
+
+realisiert verkettungen
+
+löst verkettungen auf (löscht bubbles) wenn anzahl >3
+
+zählt Score (berechnet punkte bei auflösung und addiert auf current score)
+
+
+bubbles werden zu childObjects von disc
+
+verschiedene bubbleTypen als prefabs anlegen (unterschiedliche Tags vergeben)
+
+NICE-TO-HAVES
+===================
+SpielMenue (start/neustart, quit)
+gestapelte bubbles rücken nach
+pausierbar

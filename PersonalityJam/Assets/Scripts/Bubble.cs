@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlyingObject : MonoBehaviour {
+public class Bubble : MonoBehaviour {
 
     public GameObject Target;
     public float Speed;
@@ -41,7 +41,7 @@ public class FlyingObject : MonoBehaviour {
             return;
         }
 
-        FlyingObject foComp = other.GetComponent<FlyingObject>();
+        Bubble foComp = other.GetComponent<Bubble>();
 
         //No collisions on two moving objects
         if (foComp&&!foComp.moving)
