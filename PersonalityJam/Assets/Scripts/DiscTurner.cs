@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class DiscTurner : MonoBehaviour
 {
+    [System.Serializable]
+    public class DiscElement
+    {
+        public Rigidbody2D RigidBody2D;
+        public bool RightTurnsClockWise = true;
+    }
 
+    public DiscElement[] DiscElements;
     public Rigidbody2D DiscRef;
     public float AngleAccelPerSecond = 50;
     public float MaxAngularVelocity = 50;
@@ -24,13 +31,27 @@ public class DiscTurner : MonoBehaviour
         //Rotate right
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            TurnCw();
+            //Currently all elements use the same speed, so first check if the first one has reached max speed and only update the rest if not
+            if (Turn(DiscElements[0].RigidBody2D, DiscElements[0].RightTurnsClockWise))
+            {
+                for (int i = 1; i < DiscElements.Length; i++)
+                {
+                    Turn(DiscElements[i].RigidBody2D, DiscElements[i].RightTurnsClockWise);
+                }
+            }
         }
 
         //Rotate left
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            TurnCcw();
+            //Currently all elements use the same speed, so first check if the first one has reached max speed and only update the rest if not
+            if (Turn(DiscElements[0].RigidBody2D, !DiscElements[0].RightTurnsClockWise))
+            {
+                for (int i = 1; i < DiscElements.Length; i++)
+                {
+                    Turn(DiscElements[i].RigidBody2D, !DiscElements[i].RightTurnsClockWise);
+                }
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.P))
@@ -39,6 +60,18 @@ public class DiscTurner : MonoBehaviour
         }
     }
 
+    bool Turn(Rigidbody2D rb, bool rightTurnsClockwise)
+    {
+        //Keep below max speed
+        if ((rightTurnsClockwise && rb.angularVelocity < -MaxAngularVelocity)||(!rightTurnsClockwise && rb.angularVelocity > MaxAngularVelocity))
+        {
+            return false;
+        }
+        rb.angularVelocity += (rightTurnsClockwise?-1:1) * AngleAccelPerSecond * Time.deltaTime;
+        return true;
+    }
+
+    /*
     //Clockwise
     void TurnCw()
     {
@@ -60,6 +93,7 @@ public class DiscTurner : MonoBehaviour
         }
         DiscRef.angularVelocity += AngleAccelPerSecond * Time.deltaTime;
     }
+    */
 
     void PressPause()
     {
