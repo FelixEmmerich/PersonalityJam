@@ -37,6 +37,8 @@ public class Bubble : MonoBehaviour {
         if (other.gameObject==Target)
         {
             Debug.Log("Collided with disc");
+            transform.parent = other.transform;
+            Destroy(GetComponent<Rigidbody2D>());
             moving = false;
             return;
         }
@@ -46,6 +48,8 @@ public class Bubble : MonoBehaviour {
         //No collisions on two moving objects
         if (foComp&&!foComp.moving)
         {
+            transform.parent = other.transform;
+            Destroy(GetComponent<Rigidbody2D>());
             moving = false;
 
             //Todo: Tags
