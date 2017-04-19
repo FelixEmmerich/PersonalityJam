@@ -5,12 +5,17 @@ using UnityEngine;
 public class DiscTurner : MonoBehaviour
 {
 
-    public Rigidbody2D Disc;
-    public float AngleAccelPerSecond;
+    public Rigidbody2D DiscRef;
+    public float AngleAccelPerSecond = 50;
+    public float MaxAngularVelocity = 50;
 
 	// Use this for initialization
-	void Start () {
-		
+	void Start ()
+    {
+        if (!DiscRef)
+        {
+            DiscRef = Disc.Instance.GetComponent<Rigidbody2D>();
+        }
 	}
 	
 	// Update is called once per frame
@@ -19,13 +24,45 @@ public class DiscTurner : MonoBehaviour
         //Rotate right
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            Disc.angularVelocity -= AngleAccelPerSecond * Time.deltaTime;
+            TurnCw();
         }
 
         //Rotate left
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            Disc.angularVelocity += AngleAccelPerSecond * Time.deltaTime;
+            TurnCcw();
         }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            PressPause();
+        }
+    }
+
+    //Clockwise
+    void TurnCw()
+    {
+        //Keep below max speed
+        if (DiscRef.angularVelocity < -MaxAngularVelocity)
+        {
+            return;
+        }
+        DiscRef.angularVelocity -= AngleAccelPerSecond * Time.deltaTime;
+    }
+
+    //Counterclockwise
+    void TurnCcw()
+    {
+        //Keep below max speed
+        if (DiscRef.angularVelocity > MaxAngularVelocity)
+        {
+            return;
+        }
+        DiscRef.angularVelocity += AngleAccelPerSecond * Time.deltaTime;
+    }
+
+    void PressPause()
+    {
+        Time.timeScale = ((Time.timeScale + 1) % 2);
     }
 }

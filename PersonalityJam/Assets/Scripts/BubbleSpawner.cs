@@ -6,7 +6,7 @@ public class BubbleSpawner : MonoBehaviour
 {
 
     public GameObject DiscRef;
-    public List<GameObject> BubblePrefabs;
+    private Object[] BubblePrefabs;
     public float SpawnTime;
     public float SpawnRadius;
 
@@ -17,13 +17,14 @@ public class BubbleSpawner : MonoBehaviour
         {
             DiscRef = Disc.Instance.gameObject;
         }
+        BubblePrefabs = LoadPrefabs();
         StartCoroutine(SpawnAfterTime(SpawnTime));
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
-	}
+	void Update ()
+    {
+    }
 
     public void Spawn(GameObject prefab, Vector2 center, float radius)
     {
@@ -34,7 +35,8 @@ public class BubbleSpawner : MonoBehaviour
 
     public void Spawn()
     {
-        GameObject objectToSpawn = BubblePrefabs[Random.Range(0,BubblePrefabs.Count-1)];
+        int rnd = Random.Range(0, BubblePrefabs.Length);
+        GameObject objectToSpawn = (GameObject)BubblePrefabs[rnd];
         Spawn(objectToSpawn, DiscRef.transform.position, SpawnRadius);
     }
 
@@ -61,6 +63,11 @@ public class BubbleSpawner : MonoBehaviour
     public float GetNextSpawnTime()
     {
         //Placeholder
-        return 1;
+        return SpawnTime;
+    }
+
+    public Object[] LoadPrefabs()
+    {
+        return Resources.LoadAll("Prefabs");
     }
 }
