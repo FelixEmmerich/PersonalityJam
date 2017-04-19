@@ -22,12 +22,13 @@ public class DiscTurner : MonoBehaviour
         if (!DiscRef)
         {
             DiscRef = Disc.Instance.GetComponent<Rigidbody2D>();
+            if (DiscElements.Length == 0)
+            {
+                DiscElements = new DiscElement[1];
+                DiscElements[0] = new DiscElement { RigidBody2D = DiscRef };
+            }
         }
-        if (DiscElements.Length == 0)
-        {
-            DiscElements = new DiscElement[1];
-            DiscElements[1] = new DiscElement { RigidBody2D = DiscRef };
-        }
+
 	}
 	
 	// Update is called once per frame
@@ -39,9 +40,12 @@ public class DiscTurner : MonoBehaviour
             //Currently all elements use the same speed, so first check if the first one has reached max speed and only update the rest if not
             if (Turn(DiscElements[0].RigidBody2D, DiscElements[0].RightTurnsClockWise))
             {
-                for (int i = 1; i < DiscElements.Length; i++)
+                if (DiscElements.Length > 1)
                 {
-                    Turn(DiscElements[i].RigidBody2D, DiscElements[i].RightTurnsClockWise);
+                    for (int i = 1; i < DiscElements.Length; i++)
+                    {
+                        Turn(DiscElements[i].RigidBody2D, DiscElements[i].RightTurnsClockWise);
+                    }
                 }
             }
         }
@@ -52,9 +56,12 @@ public class DiscTurner : MonoBehaviour
             //Currently all elements use the same speed, so first check if the first one has reached max speed and only update the rest if not
             if (Turn(DiscElements[0].RigidBody2D, !DiscElements[0].RightTurnsClockWise))
             {
-                for (int i = 1; i < DiscElements.Length; i++)
+                if (DiscElements.Length > 1)
                 {
-                    Turn(DiscElements[i].RigidBody2D, !DiscElements[i].RightTurnsClockWise);
+                    for (int i = 1; i < DiscElements.Length; i++)
+                    {
+                        Turn(DiscElements[i].RigidBody2D, !DiscElements[i].RightTurnsClockWise);
+                    } 
                 }
             }
         }
