@@ -51,6 +51,7 @@ public class FlyingObject : MonoBehaviour {
             //Todo: Tags
             if (other.tag == tag)
             {
+                Debug.Log("Collided with other FO");
                 foComp.CreateConnection();
             }
         }
