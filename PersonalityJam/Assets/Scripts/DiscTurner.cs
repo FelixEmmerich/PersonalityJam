@@ -22,7 +22,7 @@ public class DiscTurner : MonoBehaviour
         if (!DiscRef)
         {
             DiscRef = Disc.Instance.GetComponent<Rigidbody2D>();
-            if (DiscElements.Length == 0)
+            if (DiscElements==null || DiscElements.Length == 0)
             {
                 DiscElements = new DiscElement[1];
                 DiscElements[0] = new DiscElement { RigidBody2D = DiscRef };
