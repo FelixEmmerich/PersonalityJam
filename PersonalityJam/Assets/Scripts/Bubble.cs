@@ -21,7 +21,7 @@ public class Bubble : MonoBehaviour {
         if (moving)
         {
             float step = Speed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, step); 
+            transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, step);
         }
     }
 
@@ -50,18 +50,18 @@ public class Bubble : MonoBehaviour {
         //No collisions on two moving objects
         if (bubbleComp&&!bubbleComp.moving)
         {
-            //transform.parent = other.transform;
             transform.parent = other.transform.parent;
             GameManager.instance.bubbleCount = 1;
             Destroy(GetComponent<Rigidbody2D>());
             moving = false;
             gameObject.GetComponent<TrailRenderer>().enabled = false;
 
-            if (other.tag == tag)
-            {
-                Debug.Log("Collided with other Bubble of same type");
-                CreateCombo(bubbleComp);
-            }
+            List<Collider2D> allNeighbours = new List<Collider2D>();
+            allNeighbours.Add(gameObject.GetComponent<Collider2D>());
+
+            List<Collider2D> relatedNeighbours = GameManager.instance.CheckRelatedNeighbours(allNeighbours[0],allNeighbours);
+
+            GameManager.instance.GenerateScore(relatedNeighbours);
         }
     }
 

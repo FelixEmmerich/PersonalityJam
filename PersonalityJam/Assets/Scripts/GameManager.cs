@@ -7,17 +7,21 @@ using System;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;  //static instance of GameManager to be visible by/accessible from any other script; initialize as null so there is none in the first place
-    enum GameState { playing, gameOver };
-    private GameState CurrentState = GameState.playing;
+    public enum GameState { playing, gameOver };
+    public GameState CurrentState = GameState.playing;
     public int bubblesMax;
     [SerializeField]
     private int _bubbleCount = 0;
     public GameObject[] bubbleCombo;
 
+    public ContactFilter2D bubbleFilter;
+
+    public int Score;
+
     //===============================================================
     //Getter / Setter
     //===============================================================
-    
+
     public int bubbleCount
     {
         get { return _bubbleCount; }
@@ -40,10 +44,63 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public List <Collider2D> CheckRelatedNeighbours(Collider2D currentBubble, List<Collider2D> relatedNeighbours)
+    {
+        Collider2D[] neighbours = GameManager.instance.CheckNeighbours(currentBubble);
+
+        int counter = 0;
+
+        foreach (Collider2D neighbour in neighbours)
+        {
+            counter++;
+
+            if (neighbour.tag == 
+                currentBubble.tag && 
+                !relatedNeighbours.Contains(neighbour)) {
+                relatedNeighbours.Add(neighbour);
+                relatedNeighbours=CheckRelatedNeighbours(neighbour, relatedNeighbours);
+            }
+        }
+        //Debug.Log("Related Neighbours are: " + relatedNeighbours[0] + relatedNeighbours[1] + relatedNeighbours[2] + relatedNeighbours[3] + relatedNeighbours[4]);
+
+        return relatedNeighbours;
+    }
+
+    public void GenerateScore(List<Collider2D> colliders)
+    {
+        int numBubbles = colliders.Count;
+        switch (numBubbles)
+        {
+            case 0: break;
+            case 1: break;
+            case 2: break;
+            case 3: Score += numBubbles; DestroyBubbles(colliders); break;
+            case 4: Score += numBubbles*2; DestroyBubbles(colliders); break;
+            case 5: Score += numBubbles*3; DestroyBubbles(colliders); break;
+            default: DestroyBubbles(colliders); break;
+        }
+    }
+
+    public void DestroyBubbles(List<Collider2D> colliders)
+    {
+        foreach (Collider2D bubble in colliders)
+        {
+            Destroy(bubble.gameObject);
+        }
+    }
+
+    public Collider2D[]CheckNeighbours(Collider2D currentBubble)
+    {
+        Collider2D[] neighbours = new Collider2D[5];
+        //ContactFilter2D bubbleFilter = new ContactFilter2D();
+        //bubbleFilter.SetLayerMask(1 << LayerMask.NameToLayer("Bubble"));
+        //currentBubble.OverlapCollider(bubbleFilter,neighbours);
+        neighbours = Physics2D.OverlapCircleAll(currentBubble.gameObject.transform.position, ((CircleCollider2D)currentBubble).radius *(currentBubble.gameObject.transform.localScale.x), bubbleFilter.layerMask);
+        return neighbours;
+    }
 
     private void CheckGameState()
     {
-        
         switch (CurrentState)
         {
             case GameState.playing:

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BubbleSpawner : MonoBehaviour
@@ -7,8 +6,11 @@ public class BubbleSpawner : MonoBehaviour
 
     public GameObject DiscRef;
     private Object[] BubblePrefabs;
-    public float SpawnTime;
+    public float BaseSpawnTime=1;
+    private float _currentSpawnTime;
     public float SpawnRadius;
+    public bool CanSpawn = true;
+    private Coroutine _spawnRoutine;
 
 	// Use this for initialization
 	void Start ()
@@ -18,7 +20,11 @@ public class BubbleSpawner : MonoBehaviour
             DiscRef = Disc.Instance.gameObject;
         }
         BubblePrefabs = LoadPrefabs();
-        StartCoroutine(SpawnAfterTime(SpawnTime));
+        _currentSpawnTime = BaseSpawnTime;
+        if (CanSpawn)
+        {
+            SetAutoSpawnActive(true);
+        }
 	}
 	
 	// Update is called once per frame
@@ -26,11 +32,28 @@ public class BubbleSpawner : MonoBehaviour
     {
     }
 
+    public void SetAutoSpawnActive(bool active)
+    {
+        CanSpawn = active;
+
+        if (!active)
+        {
+            StopCoroutine(_spawnRoutine);
+            Debug.Log("Return");
+            return;
+        }
+        Debug.Log("False");
+        _spawnRoutine = StartCoroutine(SpawnAfterTime(BaseSpawnTime));
+    }
+
     public void Spawn(GameObject prefab, Vector2 center, float radius)
     {
-        Vector2 location = GetRandomPointOnCircle(center, radius);
-        GameObject go = Instantiate(prefab);
-        go.transform.position = location;
+        if (CanSpawn)
+        {
+            Vector2 location = GetRandomPointOnCircle(center, radius);
+            GameObject go = Instantiate(prefab);
+            go.transform.position = location; 
+        }
     }
 
     public void Spawn()
@@ -52,18 +75,20 @@ public class BubbleSpawner : MonoBehaviour
 
     private IEnumerator SpawnAfterTime (float time)
     {
-        while (true)
+        while (CanSpawn)
         {
             yield return new WaitForSeconds(time);
             Spawn();
             time = GetNextSpawnTime(); 
         }
+        SetAutoSpawnActive(false);
+        yield break;
     }
 
     public float GetNextSpawnTime()
     {
         //Placeholder
-        return SpawnTime;
+        return _currentSpawnTime;
     }
 
     public Object[] LoadPrefabs()
