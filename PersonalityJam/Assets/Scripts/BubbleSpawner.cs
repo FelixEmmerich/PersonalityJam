@@ -5,7 +5,7 @@ public class BubbleSpawner : MonoBehaviour
 {
 
     public GameObject DiscRef;
-    private Object[] BubblePrefabs;
+    public GraphicsManager GraphicsManagerRef;
     public float BaseSpawnTime=1;
     private float _currentSpawnTime;
     public float SpawnRadius;
@@ -19,7 +19,10 @@ public class BubbleSpawner : MonoBehaviour
         {
             DiscRef = Disc.Instance.gameObject;
         }
-        BubblePrefabs = LoadPrefabs();
+        if (GraphicsManagerRef == null)
+        {
+            GraphicsManagerRef = GraphicsManager.Instance;
+        }
         _currentSpawnTime = BaseSpawnTime;
         if (CanSpawn)
         {
@@ -60,9 +63,9 @@ public class BubbleSpawner : MonoBehaviour
     {
         if (Disc.Instance!=null)
         {
-            int rnd = Random.Range(0, BubblePrefabs.Length);
-            GameObject objectToSpawn = (GameObject)BubblePrefabs[rnd];
-            Spawn(objectToSpawn, DiscRef.transform.position, SpawnRadius); 
+            int rnd = Random.Range(0, GraphicsManagerRef.BubblePrefabs.Length);
+            GameObject objectToSpawn = GraphicsManagerRef.BubblePrefabs[rnd];
+            Spawn(objectToSpawn, DiscRef.transform.position, SpawnRadius);
         }
     }
 
@@ -92,10 +95,5 @@ public class BubbleSpawner : MonoBehaviour
     {
         //Placeholder
         return _currentSpawnTime;
-    }
-
-    public Object[] LoadPrefabs()
-    {
-        return Resources.LoadAll("Prefabs");
     }
 }

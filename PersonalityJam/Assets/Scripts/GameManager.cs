@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +13,6 @@ public class GameManager : MonoBehaviour
     public int bubblesMax;
     [SerializeField]
     private int _bubbleCount = 0;
-    public GameObject[] bubbleCombo;
 
     public ContactFilter2D bubbleFilter;
 
@@ -87,9 +87,13 @@ public class GameManager : MonoBehaviour
 
     public void DestroyBubbles(List<Collider2D> colliders)
     {
+        GraphicsManager grM = GraphicsManager.Instance;
         bubbleCount = -colliders.Count;
         foreach (Collider2D bubble in colliders)
         {
+
+            GameObject go = Instantiate(grM.DestructionEffects[Random.Range(0, grM.DestructionEffects.Length)]);
+            go.transform.position = bubble.transform.position;
             Destroy(bubble.gameObject);
         }
     }
