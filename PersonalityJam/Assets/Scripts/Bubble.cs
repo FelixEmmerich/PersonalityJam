@@ -56,13 +56,12 @@ public class Bubble : MonoBehaviour {
             moving = false;
             gameObject.GetComponent<TrailRenderer>().enabled = false;
 
-            if (other.tag == tag)
-            {
-                Debug.Log("Collided with other Bubble of same type");
-                CreateCombo(bubbleComp);
-            }
-            Debug.Log("Collider: "+gameObject.GetComponent<Collider2D>());
-            GameManager.instance.CheckRelatedNeighbours(gameObject.GetComponent<Collider2D>());
+            List<Collider2D> allNeighbours = new List<Collider2D>();
+            allNeighbours.Add(gameObject.GetComponent<Collider2D>());
+
+            List<Collider2D> relatedNeighbours = GameManager.instance.CheckRelatedNeighbours(allNeighbours[0],allNeighbours);
+
+            GameManager.instance.GenerateScore(relatedNeighbours);
         }
     }
 
