@@ -21,7 +21,7 @@ public class Bubble : MonoBehaviour {
         if (moving)
         {
             float step = Speed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, step); 
+            transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, step);
         }
     }
 
@@ -62,6 +62,8 @@ public class Bubble : MonoBehaviour {
                 Debug.Log("Collided with other Bubble of same type");
                 CreateCombo(bubbleComp);
             }
+            Debug.Log("Collider: "+gameObject.GetComponent<Collider2D>());
+            GameManager.instance.CheckRelatedNeighbours(gameObject.GetComponent<Collider2D>());
         }
     }
 
