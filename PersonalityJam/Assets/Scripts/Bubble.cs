@@ -40,30 +40,34 @@ public class Bubble : MonoBehaviour {
             transform.parent = other.transform;
             Destroy(GetComponent<Rigidbody2D>());
             moving = false;
+            gameObject.GetComponent<TrailRenderer>().enabled = false;
+            GameManager.instance.bubbleCount = 1;
             return;
         }
 
-        Bubble foComp = other.GetComponent<Bubble>();
+        Bubble bubbleComp = other.GetComponent<Bubble>();
 
         //No collisions on two moving objects
-        if (foComp&&!foComp.moving)
+        if (bubbleComp&&!bubbleComp.moving)
         {
-            transform.parent = other.transform;
+            //transform.parent = other.transform;
+            transform.parent = other.transform.parent;
+            GameManager.instance.bubbleCount = 1;
             Destroy(GetComponent<Rigidbody2D>());
             moving = false;
+            gameObject.GetComponent<TrailRenderer>().enabled = false;
 
-            //Todo: Tags
             if (other.tag == tag)
             {
-                Debug.Log("Collided with other FO");
-                foComp.CreateConnection();
+                Debug.Log("Collided with other Bubble of same type");
+                CreateCombo(bubbleComp);
             }
         }
     }
 
-    public void CreateConnection()
+    public void CreateCombo(Bubble bubbleComp)
     {
-        Connections++;
-        //todo: Update connected FOs
+ 
+        
     }
 }
