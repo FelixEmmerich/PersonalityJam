@@ -14,10 +14,14 @@ public class GameManager : MonoBehaviour
     private int _bubbleCount = 0;
     public GameObject[] bubbleCombo;
 
+    public Collider2D[] neighbours;
+
+    public ContactFilter2D bubbleFilter;
+
     //===============================================================
     //Getter / Setter
     //===============================================================
-    
+
     public int bubbleCount
     {
         get { return _bubbleCount; }
@@ -44,11 +48,14 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Checking for related neighbours...");
         List<Collider2D> relatedNeighbours = new List<Collider2D>();
-        Collider2D[] neighbours = GameManager.instance.CheckNeighbours(currentBubble);
+        neighbours = GameManager.instance.CheckNeighbours(currentBubble);
+        Debug.Log("Current blurble: " + currentBubble);
 
         foreach (Collider2D neighbour in neighbours)
         {
-            if (neighbour.tag == currentBubble.tag && !relatedNeighbours.Contains(currentBubble)) {
+            if (neighbour.tag == 
+                currentBubble.tag && 
+                !relatedNeighbours.Contains(currentBubble)) {
                 relatedNeighbours.Add(neighbour);
                 Debug.Log("Related Neighbour"+ neighbour +" added");
             }
@@ -61,11 +68,12 @@ public class GameManager : MonoBehaviour
     public Collider2D[]CheckNeighbours(Collider2D currentBubble)
     {
         Collider2D[] neighbours = new Collider2D[5];
-        ContactFilter2D bubbleFilter = new ContactFilter2D();
-        bubbleFilter.SetLayerMask(LayerMask.NameToLayer("Bubble"));
+        //ContactFilter2D bubbleFilter = new ContactFilter2D();
+        //bubbleFilter.SetLayerMask(1 << LayerMask.NameToLayer("Bubble"));
         Debug.Log("Bubble Layer Number:"+ LayerMask.NameToLayer("Bubble"));
         Debug.Log("LayerMask number for bubbles is "+bubbleFilter.layerMask);
-        currentBubble.OverlapCollider(bubbleFilter,neighbours);
+        //currentBubble.OverlapCollider(bubbleFilter,neighbours);
+        neighbours = Physics2D.OverlapCircleAll(currentBubble.gameObject.transform.position, ((CircleCollider2D)currentBubble).radius, bubbleFilter.layerMask);
         return neighbours;
     }
 

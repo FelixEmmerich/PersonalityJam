@@ -50,7 +50,6 @@ public class Bubble : MonoBehaviour {
         //No collisions on two moving objects
         if (bubbleComp&&!bubbleComp.moving)
         {
-            //transform.parent = other.transform;
             transform.parent = other.transform.parent;
             GameManager.instance.bubbleCount = 1;
             Destroy(GetComponent<Rigidbody2D>());
