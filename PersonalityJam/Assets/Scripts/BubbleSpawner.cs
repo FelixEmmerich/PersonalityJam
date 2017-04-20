@@ -48,7 +48,7 @@ public class BubbleSpawner : MonoBehaviour
 
     public void Spawn(GameObject prefab, Vector2 center, float radius)
     {
-        if (CanSpawn)
+        if (Disc.Instance!=null)
         {
             Vector2 location = GetRandomPointOnCircle(center, radius);
             GameObject go = Instantiate(prefab);
@@ -58,9 +58,12 @@ public class BubbleSpawner : MonoBehaviour
 
     public void Spawn()
     {
-        int rnd = Random.Range(0, BubblePrefabs.Length);
-        GameObject objectToSpawn = (GameObject)BubblePrefabs[rnd];
-        Spawn(objectToSpawn, DiscRef.transform.position, SpawnRadius);
+        if (Disc.Instance!=null)
+        {
+            int rnd = Random.Range(0, BubblePrefabs.Length);
+            GameObject objectToSpawn = (GameObject)BubblePrefabs[rnd];
+            Spawn(objectToSpawn, DiscRef.transform.position, SpawnRadius); 
+        }
     }
 
     public Vector2 GetRandomPointOnCircle(Vector2 center, float radius)

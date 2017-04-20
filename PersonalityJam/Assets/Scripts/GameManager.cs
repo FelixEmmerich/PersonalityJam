@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
-
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +17,10 @@ public class GameManager : MonoBehaviour
     public ContactFilter2D bubbleFilter;
 
     public int Score;
+
+    public string Endlevel;
+
+    bool over = false;
 
     //===============================================================
     //Getter / Setter
@@ -83,6 +87,7 @@ public class GameManager : MonoBehaviour
 
     public void DestroyBubbles(List<Collider2D> colliders)
     {
+        bubbleCount = -colliders.Count;
         foreach (Collider2D bubble in colliders)
         {
             Destroy(bubble.gameObject);
@@ -107,7 +112,15 @@ public class GameManager : MonoBehaviour
                 Debug.Log("The game is playing!");
                 break;
             case GameState.gameOver:
+                if (over)
+                {
+                    break;
+                }
+                over = true;
                 Debug.Log("Gameover!");
+                SceneManager.LoadScene("Endscreen");
+                Destroy(Disc.Instance.gameObject);
+                CurrentState = GameState.playing;
                 break;
             default:
                 Debug.Log("Nothing!");
@@ -124,9 +137,10 @@ public class GameManager : MonoBehaviour
     {
         if(bubbleCount >= bubblesMax)
         {
+            bubbleCount = 0;
             CurrentState = GameState.gameOver;
             Debug.Log("GameState changed to"+CurrentState);
+            CheckGameState();
         }
-        CheckGameState();
     }
 }
