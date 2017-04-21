@@ -32,15 +32,13 @@ public class GraphicsManager : MonoBehaviour {
         DontDestroyOnLoad(this.gameObject);
 
         LoadResourcesToArray(ref BubblePrefabs, "Prefabs");
-        LoadResourcesToArray(ref DestructionEffects, "Texture");
+        LoadResourcesToArray(ref DestructionEffects, "Death");
     }
 
     private static void LoadResourcesToArray<T>(ref T[] array, string folderName) where T:class
     {
-        Debug.Log("Loadresources");
         Object[] temp = Resources.LoadAll(folderName);
         array = new T[temp.Length];
-        Debug.Log("Temp length: " + temp.Length);
         for (int i = temp.Length - 1; i >= 0; --i)
         {
             array[i] = temp[i] as T;
