@@ -41,7 +41,8 @@ public class Bubble : MonoBehaviour {
             Destroy(GetComponent<Rigidbody2D>());
             moving = false;
             gameObject.GetComponent<TrailRenderer>().enabled = false;
-            GameManager.instance.bubbleCount = 1;
+            Debug.Log("Do your thing with the disc");
+            GameManager.instance.AddBubble(gameObject);
             return;
         }
 
@@ -51,7 +52,8 @@ public class Bubble : MonoBehaviour {
         if (bubbleComp&&!bubbleComp.moving)
         {
             transform.parent = other.transform.parent;
-            GameManager.instance.bubbleCount = 1;
+            Debug.Log("Do your thing with the bubble");
+            GameManager.instance.AddBubble(gameObject);
             Destroy(GetComponent<Rigidbody2D>());
             moving = false;
             gameObject.GetComponent<TrailRenderer>().enabled = false;
@@ -63,11 +65,5 @@ public class Bubble : MonoBehaviour {
 
             GameManager.instance.GenerateScore(relatedNeighbours);
         }
-    }
-
-    public void CreateCombo(Bubble bubbleComp)
-    {
- 
-        
     }
 }

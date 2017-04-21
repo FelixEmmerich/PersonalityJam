@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
 
     bool over = false;
 
+    //If a bubble is connected and its distance to the center is greater than this, it's GameOver. Currently set in awake.
+    public float GameOverDistance;
+
     //===============================================================
     //Getter / Setter
     //===============================================================
@@ -29,7 +32,18 @@ public class GameManager : MonoBehaviour
     public int bubbleCount
     {
         get { return _bubbleCount; }
-        set { _bubbleCount += value; Debug.Log("BubbleCount: "+_bubbleCount); }
+        set
+        {
+            _bubbleCount += value;
+            Debug.Log("BubbleCount: "+_bubbleCount);
+            if (_bubbleCount >= bubblesMax)
+            {
+                _bubbleCount = 0;
+                CurrentState = GameState.gameOver;
+                Debug.Log("GameState changed to" + CurrentState);
+                CheckGameState();
+            }
+        }
     }
 
     void Awake()
@@ -44,7 +58,8 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         //sets this to not be destroyed when reloading the scene
         DontDestroyOnLoad(gameObject);
-        bubblesMax = 150;
+        bubblesMax = 100;
+        GameOverDistance = FindObjectOfType<BubbleSpawner>().SpawnRadius*0.9f;
     }
 
 
@@ -132,19 +147,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void AddBubble(GameObject bubble)
+    {
+        bubbleCount=1;
+        float dist = Vector2.Distance(bubble.transform.position, Disc.Instance.transform.position);
+        Debug.Log(dist);
+        if (dist >= GameOverDistance)
+        {
+            _bubbleCount = 0;
+            CurrentState = GameState.gameOver;
+            Debug.Log("GameState changed to" + CurrentState);
+            CheckGameState();
+        }
+    }
+
+    private void Update()
+    {
+        
+    }
+
     private void FixedUpdate()
     {
 
-    }
-
-    void Update()
-    {
-        if(bubbleCount >= bubblesMax)
-        {
-            bubbleCount = 0;
-            CurrentState = GameState.gameOver;
-            Debug.Log("GameState changed to"+CurrentState);
-            CheckGameState();
-        }
     }
 }

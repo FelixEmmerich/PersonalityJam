@@ -45,7 +45,6 @@ public class BubbleSpawner : MonoBehaviour
             Debug.Log("Return");
             return;
         }
-        Debug.Log("False");
         _spawnRoutine = StartCoroutine(SpawnAfterTime(BaseSpawnTime));
     }
 
